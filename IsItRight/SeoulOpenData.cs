@@ -57,7 +57,7 @@ namespace IsItRight
         // 범위: 00 ~ 23
         public string Time
         {
-            get => _time.ToString("D2");
+            get => (_time == 0) ? "" : _time.ToString("D2");
             set
             {
                 if (0 > Int32.Parse(value) || Int32.Parse(value) > 23) return;
