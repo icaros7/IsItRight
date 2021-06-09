@@ -42,13 +42,13 @@ namespace IsItRight
         // 정확성을 위해 2020년 2월 이후 설정 가능
         public int Date
         {
-            get => Int32.Parse(_date.ToString("yyyymmdd"));
+            get => Int32.Parse(_date.ToString("yyyyMMdd"));
             set
             {
                 DateTime today = DateTime.Today;
-                if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyymmdd"))) return;
+                if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyyMMdd"))) return;
 
-                _date = DateTime.Parse(value.ToString());
+                _date = DateTime.ParseExact(value.ToString(), @"yyyyMMdd", null);
                 Debug.WriteLine(@">> Set Date: " + value);
             }
         }
