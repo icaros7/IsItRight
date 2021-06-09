@@ -66,20 +66,11 @@ namespace IsItRight
             }
         }
         
-        /*
-         * 성별 별 나이대 설정 메서드
-         *
-         * sex = 0, 남성
-         * sex = 1, 여성
-         *
-         * age[0] = 0~9세
-         * age[1] = 10~14세
-         * age[2] = 15~19세
-         * ...
-         * age[11] = 60~64세
-         * age[12] = 65~69세
-         * age[13] = 70세 이상
-         */
+        /// <summary>
+        /// 나이대 배열 설정 메서드
+        /// </summary>
+        /// <param name="sex">0(남성), 1(여성) 중 입력</param>
+        /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,14(64~69),15(70+@)</param>
         public void SetAge(int sex, int[] age)
         {
             if (sex == 0) { _male = new bool[14]; }
