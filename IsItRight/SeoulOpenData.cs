@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace IsItRight
 {
@@ -99,6 +101,36 @@ namespace IsItRight
         {
             Debug.WriteLine(@"> New SeoulOpenData initializing: " + name);
             ApiKey = apiKey;
+        }
+
+        /// <summary>
+        /// openAPI를 사용한 json 데이터 읽기 메서드, `행정동별 서울생활인구(내국인)` 참고
+        /// </summary>
+        /// <param name="value">가져올 json name</param>
+        /// <param name="row">데이터 row 번호</param>
+        /// <returns></returns>
+        public string GetValue(string value,int row)
+        {
+            Debug.WriteLine(@">> Call GetValue");
+            using (WebClient wc = new WebClient())
+            {
+                Debug.WriteLine(@">>> Call json data: " + value + @", " + row);
+                string jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey + @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
+                                                                 Date + @"/" + Time + @"/" + Location);
+                
+                JObject json = JObject.Parse(jsonData);
+                if (json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE").ToString() != @"INFO-000")
+                {
+                    string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.MESSAGE");
+                    Debug.WriteLine(@">>>> Error: " + e);
+                    
+                    Debug.WriteLine(@">>> End of GetValue");
+                    return e;
+                }
+                
+                Debug.WriteLine(@">>> End of GetValue");
+                return (string)json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[" + row + @"]." + value);
+            }
         }
     }
 }
