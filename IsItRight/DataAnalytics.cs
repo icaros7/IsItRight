@@ -22,25 +22,16 @@ namespace IsItRight
         public double GetSumArg(string value)
         {
             Debug.WriteLine(@"INFO: Call GetSumArg");
-            int row = (so.Time == @"") ? 0 : (23 - Int32.Parse(so.Time) > 4) ? Int32.Parse(so.Time) : 4;
-            Debug.WriteLine(@"INFO: Set Row: " + row);
+            int row = so.Time == @"" ? 5 : 1;
+            Debug.WriteLine(@"INFO: Set Row: " + (row - 1));
             
             double sum = 0;
             
             // TODO: 결과값 확인 요망 
-            for (int i = 0; i <= row; i++)
+            for (int i = 0; i < row; i++)
             {
-                if (Double.TryParse(so.GetValue(value, i), out double temp))
-                {
-                    Debug.WriteLine(temp);
-                    sum += temp;
-                    Debug.WriteLine(sum);
-                }
-                else
-                {
-                    Debug.WriteLine(@"Is Here?");
-                    return sum / row;
-                }
+                sum += Double.Parse(so.GetValue(value, i));
+                Debug.WriteLine(@"sum: " + sum + @", i: " + i);
             }
             
             return sum / row;
