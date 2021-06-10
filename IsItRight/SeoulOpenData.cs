@@ -109,7 +109,7 @@ namespace IsItRight
         /// openAPI를 사용한 json 데이터 읽기 메서드, `행정동별 서울생활인구(내국인)` 참고
         /// </summary>
         /// <param name="value">가져올 json name</param>
-        /// <param name="row">데이터 row 번호</param>
+        /// <param name="row">0-4, 데이터 row 번호</param>
         /// <returns></returns>
         public string GetValue(string value,int row)
         {
