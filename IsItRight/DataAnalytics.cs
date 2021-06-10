@@ -27,11 +27,17 @@ namespace IsItRight
             
             double sum = 0;
             
-            // TODO: 결과값 확인 요망 
             for (int i = 0; i < row; i++)
             {
-                sum += Double.Parse(so.GetValue(value, i));
-                Debug.WriteLine(@"sum: " + sum + @", i: " + i);
+                if (Double.TryParse(so.GetValue(value, i), out double tmp))
+                {
+                    sum += tmp;
+                    Debug.WriteLine(@"sum: " + sum + @", i: " + i);
+                }
+                else
+                {
+                    return -1;
+                }
             }
             
             return sum / row;
