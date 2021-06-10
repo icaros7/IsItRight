@@ -95,6 +95,19 @@ namespace IsItRight
         }
 
         /// <summary>
+        /// 각 성별 나이대 bool 배열 반환
+        /// </summary>
+        /// <param name="sex">0 or 1, 남성 or 여성</param>
+        /// <returns></returns>
+        public bool[] GetAgeArray(int sex)
+        {
+            Debug.WriteLine(@"INFO: Call GetAgeArray");
+            
+            if (sex == 0) return _male;
+            return _female;
+        }
+
+        /// <summary>
         /// 성별의 나이대 bool 값 반환
         /// </summary>
         /// <param name="sex">0(남성),1(여성)</param>
