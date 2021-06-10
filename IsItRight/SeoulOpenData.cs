@@ -95,6 +95,17 @@ namespace IsItRight
         }
 
         /// <summary>
+        /// 성별의 나이대 bool 값 반환
+        /// </summary>
+        /// <param name="sex">0(남성),1(여성)</param>
+        /// <param name="index">0~14,나이대</param>
+        /// <returns></returns>
+        public bool GetAgeAera(int sex, int index)
+        {
+            return (sex == 0) ? _male[index] : _female[index];
+        }
+
+        /// <summary>
         /// openAPI를 사용한 json 데이터 읽기 메서드, `행정동별 서울생활인구(내국인)` 참고
         /// </summary>
         /// <param name="value">가져올 json name</param>
