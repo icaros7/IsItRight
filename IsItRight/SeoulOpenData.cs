@@ -69,7 +69,7 @@ namespace IsItRight
         /// <summary>
         /// 나이대 배열 설정 메서드
         /// </summary>
-        /// <param name="sex">0(남성), 1(여성) 중 입력</param>
+        /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,14(64~69),15(70+@)</param>
         public void SetAge(int sex, int[] age)
         {

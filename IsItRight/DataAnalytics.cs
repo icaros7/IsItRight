@@ -36,7 +36,7 @@ namespace IsItRight
                 }
                 else
                 {
-                    return -1;
+                    return -1; // 잘못된 GetValue 매개변수로 인해 실패시, -1 반환
                 }
             }
             
