@@ -121,7 +121,7 @@ namespace IsItRight
                                                                  Date + @"/" + Time + @"/" + Location);
                 
                 JObject json = JObject.Parse(jsonData);
-                string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.INFO");
+                string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE");
                 if (e != @"INFO-000")
                 {
                     Debug.WriteLine(@"ERROR: " + e);
