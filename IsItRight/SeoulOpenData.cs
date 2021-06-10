@@ -11,8 +11,8 @@ namespace IsItRight
         private int _location;
         private DateTime _date;
         private int _time;
-        private bool[] _male;
-        private bool[] _female;
+        private bool[] _male = new bool[14];
+        private bool[] _female = new bool[14];
 
         // openAPI 인증키 설정 메서드
         // 발급: https://data.seoul.go.kr/together/mypage/actkeyMain.do
