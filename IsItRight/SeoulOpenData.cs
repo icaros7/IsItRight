@@ -110,7 +110,7 @@ namespace IsItRight
         /// <summary>
         /// 성별의 나이대 bool 값 반환
         /// </summary>
-        /// <param name="sex">0(남성),1(여성)</param>
+        /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="index">0~14,나이대</param>
         /// <returns></returns>
         public bool GetAgeAera(int sex, int index)
