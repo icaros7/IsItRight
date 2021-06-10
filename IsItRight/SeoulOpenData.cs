@@ -22,7 +22,7 @@ namespace IsItRight
             set
             {
                 _apiKey = value;
-                Debug.WriteLine(@">> Set openAPI Key: " + value);
+                Debug.WriteLine(@"INFO: Set openAPI Key: " + value);
             }
         }
 
@@ -34,7 +34,7 @@ namespace IsItRight
             set
             {
                 _location = value;
-                Debug.WriteLine(@">> Set Location: " + value);
+                Debug.WriteLine(@"INFO: Set Location: " + value);
             }
         }
         
@@ -49,7 +49,7 @@ namespace IsItRight
                 if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyyMMdd"))) return;
 
                 _date = DateTime.ParseExact(value.ToString(), @"yyyyMMdd", null);
-                Debug.WriteLine(@">> Set Date: " + value);
+                Debug.WriteLine(@"INFO: Set Date: " + value);
             }
         }
 
@@ -62,7 +62,7 @@ namespace IsItRight
             {
                 if (0 > Int32.Parse(value) || Int32.Parse(value) > 23) return;
                 _time = Int32.Parse(value);
-                Debug.WriteLine(@">> Set Time: " + value);
+                Debug.WriteLine(@"INFO: Set Time: " + value);
             }
         }
         
@@ -77,7 +77,7 @@ namespace IsItRight
             else if (sex == 1) { _female = new bool[14]; }
             else { return; }
             
-            Debug.Write(@">> Set True in " + (sex == 0 ? "Male" : "Female") + @": ");
+            Debug.Write(@"INFO: Set True in " + (sex == 0 ? "Male" : "Female") + @": ");
             foreach (int s in age)
             {
                 if (sex == 0) { _male[s] = true; }
@@ -90,7 +90,7 @@ namespace IsItRight
 
         public SeoulOpenData(string name,string apiKey)
         {
-            Debug.WriteLine(@"> New SeoulOpenData initializing: " + name);
+            Debug.WriteLine(@"INFO: New SeoulOpenData initializing: " + name);
             ApiKey = apiKey;
         }
 
@@ -102,24 +102,22 @@ namespace IsItRight
         /// <returns></returns>
         public string GetValue(string value,int row)
         {
-            Debug.WriteLine(@">> Call GetValue");
+            Debug.WriteLine(@"INFO: Call GetValue");
             using (WebClient wc = new WebClient())
             {
-                Debug.WriteLine(@">>> Call json data: " + value + @", " + row);
+                Debug.WriteLine(@"INFO: GetValue json data: " + value + @", " + row);
                 string jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey + @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
                                                                  Date + @"/" + Time + @"/" + Location);
                 
                 JObject json = JObject.Parse(jsonData);
-                if (json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE").ToString() != @"INFO-000")
+                string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.INFO");
+                if (e != @"INFO-000")
                 {
-                    string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.MESSAGE");
-                    Debug.WriteLine(@">>>> Error: " + e);
+                    Debug.WriteLine(@"ERROR: " + e);
                     
-                    Debug.WriteLine(@">>> End of GetValue");
                     return e;
                 }
                 
-                Debug.WriteLine(@">>> End of GetValue");
                 return (string)json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[" + row + @"]." + value);
             }
         }
