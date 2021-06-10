@@ -10,7 +10,7 @@ namespace IsItRight
         
         public DataAnalytics(SeoulOpenData seoulOpenData)
         {
-            Debug.WriteLine(@"INFO: New DataAnalytics initalizing: " + nameof(seoulOpenData));
+            Debug.WriteLine(@"INFO: New DataAnalytics initializing");
             so = seoulOpenData;
         }
 
