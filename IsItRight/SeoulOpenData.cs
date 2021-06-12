@@ -10,7 +10,7 @@ namespace IsItRight
         private string _apiKey;
         private int _location;
         private DateTime _date;
-        private int _time;
+        private int _time = -1;
         private bool[] _male = new bool[14];
         private bool[] _female = new bool[14];
 
@@ -55,13 +55,21 @@ namespace IsItRight
 
         // 시간대 설정 메서드
         // 범위: 00 ~ 23
-        public string Time => (_time == 0) ? "" : _time.ToString("D2");
-
-        public int SetTime(string value)
+        public string Time
         {
-            if (0 > Int32.Parse(value) || Int32.Parse(value) > 23) return -1;
-            _time = Int32.Parse(value);
-            Debug.WriteLine(@"INFO: Set Time: " + value);
+            get => (_time == -1) ? "" : _time.ToString("D2");
+            set
+            {
+                if (IsTime(value) == false)
+                {
+                    Debug.WriteLine(@"ERROR: " + value + @" is not correct time format. Set to -1 (Default value)");
+                    _time = -1;
+                    return;
+                }
+                _time = Int32.Parse(value);
+                Debug.WriteLine(@"INFO: Set Time: " + value);
+            }
+        }
 
         public bool IsTime(string value)
         {
