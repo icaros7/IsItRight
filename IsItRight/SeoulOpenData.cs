@@ -63,7 +63,14 @@ namespace IsItRight
             _time = Int32.Parse(value);
             Debug.WriteLine(@"INFO: Set Time: " + value);
 
-            return 0;
+        public bool IsTime(string value)
+        {
+            return 0 <= Int32.Parse(value) && Int32.Parse(value) <= 23;
+        }
+
+        public bool IsTime(string value1, string value2)
+        {
+            return IsTime(value1) && IsTime(value2) && (Int32.Parse(value1) < Int32.Parse(value2));
         }
         
         /// <summary>
