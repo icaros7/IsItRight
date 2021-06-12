@@ -40,15 +40,18 @@ namespace IsItRight
         public double GetArgThatTime(string _timeF, string _timeT, int sex)
         {
             double tmp = 0;
+            if (so.IsTime(_timeF, _timeT) == false) return -1;
+
+            string originTime = so.Time;
             int timeF = Int32.Parse(_timeF);
             int timeT = Int32.Parse(_timeT);
-            if (timeF < 0 || timeF > 23 || timeT < 0 || timeT > 23) return -1;
             for (int i = 0; i < (timeT - timeF + 1); i++)
             {
                 so.Time = (timeF + i).ToString();
                 tmp += GetSumAgeArg(sex);
             }
 
+            so.Time = (originTime == "") ? "-1" : originTime;
             return tmp / (timeT - timeF + 1);
         }
         
