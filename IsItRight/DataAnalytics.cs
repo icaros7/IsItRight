@@ -98,7 +98,7 @@ namespace IsItRight
         public double GetSumArg(string value)
         {
             Debug.WriteLine(@"INFO: Call GetSumArg");
-            int row = so.Time == @"" ? 5 : 1;
+            int row = (so.Time == "-1" ? 5 : 1);
             Debug.WriteLine(@"INFO: Set Row: " + (row - 1));
             
             double sum = 0;
