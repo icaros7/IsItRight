@@ -39,8 +39,10 @@ namespace IsItRight
         /// <returns></returns>
         public double GetArgThatTime(string _timeF, string _timeT, int sex)
         {
-            double tmp = 0;
+            Debug.WriteLine(@"INFO: Call GetArgThatTime");
+            
             if (_so.IsTime(_timeF, _timeT) == false) return -1;
+            double tmp = 0;
 
             string originTime = _so.Time;
             int timeF = Int32.Parse(_timeF);
