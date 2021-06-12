@@ -108,7 +108,6 @@ namespace IsItRight
                 if (Double.TryParse(so.GetValue(value, i), out double tmp))
                 {
                     sum += tmp;
-                    Debug.WriteLine(@"sum: " + sum + @", i: " + i);
                 }
                 else
                 {
