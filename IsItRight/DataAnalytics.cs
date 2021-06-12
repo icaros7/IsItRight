@@ -45,7 +45,7 @@ namespace IsItRight
             if (timeF < 0 || timeF > 23 || timeT < 0 || timeT > 23) return -1;
             for (int i = 0; i < (timeT - timeF + 1); i++)
             {
-                if (so.SetTime((timeF + i).ToString()) != 0) break;
+                so.Time = (timeF + i).ToString();
                 tmp += GetSumAgeArg(sex);
             }
 
