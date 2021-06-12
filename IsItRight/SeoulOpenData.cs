@@ -55,15 +55,15 @@ namespace IsItRight
 
         // 시간대 설정 메서드
         // 범위: 00 ~ 23
-        public string Time
+        public string Time => (_time == 0) ? "" : _time.ToString("D2");
+
+        public int SetTime(string value)
         {
-            get => (_time == 0) ? "" : _time.ToString("D2");
-            set
-            {
-                if (0 > Int32.Parse(value) || Int32.Parse(value) > 23) return;
-                _time = Int32.Parse(value);
-                Debug.WriteLine(@"INFO: Set Time: " + value);
-            }
+            if (0 > Int32.Parse(value) || Int32.Parse(value) > 23) return -1;
+            _time = Int32.Parse(value);
+            Debug.WriteLine(@"INFO: Set Time: " + value);
+
+            return 0;
         }
         
         /// <summary>
