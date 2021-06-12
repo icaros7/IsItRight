@@ -33,8 +33,8 @@ namespace IsItRight
         /// <summary>
         /// 특정 시간대 값들의 평균을 구합니다.
         /// </summary>
-        /// <param name="timeF">0-23, 시작 시간</param>
-        /// <param name="timeT">0-23, 종료 시간</param>
+        /// <param name="_timeF">0-23, 시작 시간</param>
+        /// <param name="_timeT">0-23, 종료 시간</param>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <returns></returns>
         public double GetArgThatTime(string _timeF, string _timeT, int sex)
@@ -82,7 +82,6 @@ namespace IsItRight
                 {
                     sum += Double.Parse(so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
                 }
-                Debug.WriteLine(@"=================");
             }
             
             return sum / (ageRow[0] * row);
