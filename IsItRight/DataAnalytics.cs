@@ -60,29 +60,32 @@ namespace IsItRight
         {
             Debug.WriteLine(@"INFO: Call GetSumAgeArg");
             
-            List<int> row = new List<int>(); // [0] row, [1] ... 성별 별 나이대 true 값 index 저장
+            List<int> ageRow = new List<int>(); // [0] row, [1] ... 성별 별 나이대 true 값 index 저장
             double sum = 0;
-            int ageF = 0, ageT = 9; // GetValue를 위한 From, To 나이대 값
+            int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
+            int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
+            int row = so.Time == @"" ? 5 : 1;
+            Debug.WriteLine(@"INFO: Set row: " + row);
 
-            SetRow(row, so.GetAgeArray(sex));
+            SetRow(ageRow, so.GetAgeArray(sex));
 
-            if (row[0] == 0)
+            if (ageRow[0] == 0)
             {
                 Debug.WriteLine(@"ERROR: No true age");
                 return -1;
             }
-            
-            Debug.WriteLine(@"INFO: Set row: " + (row.Count - 1));
-            for (int i = 0; i < row.Count - 2; i++)
-            {
-                sum += Double.Parse(so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF + @"T" + ageT + @"_LVPOP_CO", i));
-                
-                // TODO: row 리스트를 활용하여 특정 나이대 가져오기 구현
-                ageF += (i == 0) ? 10 : 5;
-                ageT += 5;
-            }
 
-            return sum / row[0];
+            for (int i = 0; i < row; i++)
+            {
+                Debug.WriteLine(@"INFO: Row: " + i);
+                for (int j = 0; j < ageRow.Count - 1; j++)
+                {
+                    sum += Double.Parse(so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
+                }
+                Debug.WriteLine(@"=================");
+            }
+            
+            return sum / (ageRow[0] * row);
         }
 
         /// <summary>
