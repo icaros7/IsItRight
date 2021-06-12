@@ -29,6 +29,28 @@ namespace IsItRight
                 row.Add(i);
             }
         }
+
+        /// <summary>
+        /// 특정 시간대 값들의 평균을 구합니다.
+        /// </summary>
+        /// <param name="timeF">0-23, 시작 시간</param>
+        /// <param name="timeT">0-23, 종료 시간</param>
+        /// <param name="sex">0 or 1, 남성 or 여성</param>
+        /// <returns></returns>
+        public double GetArgThatTime(string _timeF, string _timeT, int sex)
+        {
+            double tmp = 0;
+            int timeF = Int32.Parse(_timeF);
+            int timeT = Int32.Parse(_timeT);
+            if (timeF < 0 || timeF > 23 || timeT < 0 || timeT > 23) return -1;
+            for (int i = 0; i < (timeT - timeF + 1); i++)
+            {
+                if (so.SetTime((timeF + i).ToString()) != 0) break;
+                tmp += GetSumAgeArg(sex);
+            }
+
+            return tmp / (timeT - timeF + 1);
+        }
         
         /// <summary>
         /// 나이대 조건 별 값의 평균을 구합니다.
