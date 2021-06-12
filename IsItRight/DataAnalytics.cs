@@ -119,5 +119,18 @@ namespace IsItRight
             
             return sum / row;
         }
+
+        public double GetPercentOfAll(double value, string time)
+        {
+            Debug.WriteLine(@"INFO: Call GetPercentOfAll");
+            
+            if (_so.IsTime(time) == false) return -1;
+            string originTime = _so.Time;
+            _so.Time = time;
+            double total = double.Parse(_so.GetValue("TOT_LVPOP_CO",0));
+
+            _so.Time = (originTime == "") ? "-1" : originTime;
+            return Math.Truncate((value / total) * 10000) / 100;
+        }
     }
 }
