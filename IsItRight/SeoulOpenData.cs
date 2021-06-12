@@ -88,9 +88,9 @@ namespace IsItRight
             Debug.WriteLine(@"");
         }
 
-        public SeoulOpenData(string name,string apiKey)
+        public SeoulOpenData(string apiKey)
         {
-            Debug.WriteLine(@"INFO: New SeoulOpenData initializing: " + name);
+            Debug.WriteLine(@"INFO: New SeoulOpenData initializing");
             ApiKey = apiKey;
         }
 
