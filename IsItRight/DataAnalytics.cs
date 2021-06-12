@@ -6,12 +6,12 @@ namespace IsItRight
 {
     public class DataAnalytics
     {
-        private SeoulOpenData so;
+        private SeoulOpenData _so;
         
         public DataAnalytics(SeoulOpenData seoulOpenData)
         {
             Debug.WriteLine(@"INFO: New DataAnalytics initializing");
-            so = seoulOpenData;
+            _so = seoulOpenData;
         }
 
         /// <summary>
@@ -40,18 +40,18 @@ namespace IsItRight
         public double GetArgThatTime(string _timeF, string _timeT, int sex)
         {
             double tmp = 0;
-            if (so.IsTime(_timeF, _timeT) == false) return -1;
+            if (_so.IsTime(_timeF, _timeT) == false) return -1;
 
-            string originTime = so.Time;
+            string originTime = _so.Time;
             int timeF = Int32.Parse(_timeF);
             int timeT = Int32.Parse(_timeT);
             for (int i = 0; i < (timeT - timeF + 1); i++)
             {
-                so.Time = (timeF + i).ToString();
+                _so.Time = (timeF + i).ToString();
                 tmp += GetSumAgeArg(sex);
             }
 
-            so.Time = (originTime == "") ? "-1" : originTime;
+            _so.Time = (originTime == "") ? "-1" : originTime;
             return tmp / (timeT - timeF + 1);
         }
         
@@ -63,14 +63,14 @@ namespace IsItRight
         {
             Debug.WriteLine(@"INFO: Call GetSumAgeArg");
             
-            List<int> ageRow = new List<int>(); // [0] row, [1] ... 성별 별 나이대 true 값 index 저장
+            List<int> ageRow = new List<int>();
             double sum = 0;
             int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
             int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
-            int row = so.Time == @"" ? 5 : 1;
+            int row = _so.Time == @"" ? 5 : 1;
             Debug.WriteLine(@"INFO: Set row: " + row);
 
-            SetRow(ageRow, so.GetAgeArray(sex));
+            SetRow(ageRow, _so.GetAgeArray(sex)); // [0] row, [1] ... 성별 별 나이대 true 값 index 저장
 
             if (ageRow[0] == 0)
             {
@@ -83,7 +83,7 @@ namespace IsItRight
                 Debug.WriteLine(@"INFO: Row: " + i);
                 for (int j = 0; j < ageRow.Count - 1; j++)
                 {
-                    sum += Double.Parse(so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
+                    sum += Double.Parse(_so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
                 }
             }
             
@@ -98,14 +98,14 @@ namespace IsItRight
         public double GetSumArg(string value)
         {
             Debug.WriteLine(@"INFO: Call GetSumArg");
-            int row = (so.Time == "-1" ? 5 : 1);
+            int row = (_so.Time == "-1" ? 5 : 1);
             Debug.WriteLine(@"INFO: Set Row: " + (row - 1));
             
             double sum = 0;
             
             for (int i = 0; i < row; i++)
             {
-                if (Double.TryParse(so.GetValue(value, i), out double tmp))
+                if (Double.TryParse(_so.GetValue(value, i), out double tmp))
                 {
                     sum += tmp;
                 }
