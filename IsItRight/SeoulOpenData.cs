@@ -14,6 +14,12 @@ namespace IsItRight
         private bool[] _male = new bool[14];
         private bool[] _female = new bool[14];
 
+        public SeoulOpenData(string apiKey)
+        {
+            Debug.WriteLine(@"INFO: New SeoulOpenData initializing");
+            ApiKey = apiKey;
+        }
+
         // openAPI 인증키 설정 메서드
         // 발급: https://data.seoul.go.kr/together/mypage/actkeyMain.do
         public string ApiKey
@@ -101,12 +107,6 @@ namespace IsItRight
                 Debug.Write(s + @" ");
             }
             Debug.WriteLine(@"");
-        }
-
-        public SeoulOpenData(string apiKey)
-        {
-            Debug.WriteLine(@"INFO: New SeoulOpenData initializing");
-            ApiKey = apiKey;
         }
 
         /// <summary>
