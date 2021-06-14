@@ -66,14 +66,14 @@ namespace IsItRight
             get => (_time == -1) ? "" : _time.ToString("D2");
             set
             {
-                if (IsTime(value) == false)
+                if (IsTime(value) || value == "-1")
                 {
-                    Debug.WriteLine(@"ERROR: " + value + @" is not correct time format. Set to -1 (Default value)");
-                    _time = -1;
+                    _time = Int32.Parse(value);
+                    Debug.WriteLine(@"INFO: Set Time: " + value);
                     return;
                 }
-                _time = Int32.Parse(value);
-                Debug.WriteLine(@"INFO: Set Time: " + value);
+                Debug.WriteLine(@"ERROR: " + value + @" is not correct time format. Set to -1 (Default value)");
+                _time = -1;
             }
         }
 
