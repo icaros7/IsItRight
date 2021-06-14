@@ -42,6 +42,7 @@ namespace IsItRight
             }
         }
 
+        // TODO: GetArgThatTime, GetSumAgeArg, GetSumArg, GetPercentOfAll 메서드 GetValue 분리 반영
         /// <summary>
         /// 특정 시간대 값들의 평균을 구합니다.
         /// </summary>
@@ -134,7 +135,7 @@ namespace IsItRight
             return sum / row;
         }
 
-        public double GetPercentOfAll(double value, string time)
+        private double GetPercentOfAll(double value)
         {
             double total = double.Parse(_so.GetValue("TOT_LVPOP_CO",0));
 
