@@ -131,8 +131,9 @@ namespace IsItRight
         /// </summary>
         public void Release()
         {
-            wb.Close();
+            wb.Close(false);
             excelApp.Quit();
+            excelApp.Workbooks.Close();
             GC.Collect();
             Debug.WriteLine("INFO: Released");
         }
