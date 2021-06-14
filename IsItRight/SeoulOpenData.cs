@@ -134,31 +134,16 @@ namespace IsItRight
             return (sex == 0) ? _male[index] : _female[index];
         }
 
-        /// <summary>
-        /// openAPI를 사용한 json 데이터 읽기 메서드, `행정동별 서울생활인구(내국인)` 참고
-        /// </summary>
-        /// <param name="value">가져올 json name</param>
-        /// <param name="row">0-4, 데이터 row 번호</param>
-        /// <returns></returns>
-        // TODO: JSON 데이터 파싱과 GetValue 분리
-        public string GetValue(string value,int row)
+        public string GetJson()
         {
             using (WebClient wc = new WebClient())
             {
-                Debug.WriteLine(@"INFO: GetValue Date: {0}, Location: {1}, Time: {2}, Value: {3}, Row: {4}", Date, Location, Time, value, row);
+                if (_time == -1) return "-1";
                 string jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey + @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
                                                                  Date + @"/" + Time + @"/" + Location);
+                Debug.WriteLine(@"INFO: GetJSON Date: {0}, Location: {1}, Time: {2}", Date, Location, Time);
                 
-                JObject json = JObject.Parse(jsonData);
-                string e = (string) json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE");
-                if (e != @"INFO-000")
-                {
-                    Debug.WriteLine(@"ERROR: " + e);
-                    
-                    return e;
-                }
-                
-                return (string)json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[" + row + @"]." + value);
+                return jsonData;
             }
         }
     }
