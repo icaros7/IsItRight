@@ -34,6 +34,7 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
+                Release();
             }
         }
 
@@ -75,6 +76,7 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
+                Release();
             }
         }
 
@@ -96,6 +98,7 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
+                Release();
             }
             row++;
         }
@@ -127,8 +130,10 @@ namespace IsItRight
         /// </summary>
         public void Release()
         {
+            wb.Close();
             excelApp.Quit();
             GC.Collect();
+            Debug.WriteLine("INFO: Released");
         }
     }
 }
