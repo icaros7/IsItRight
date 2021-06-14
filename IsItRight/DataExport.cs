@@ -65,6 +65,7 @@ namespace IsItRight
 
                 field = (Excel.PivotField)pt.PivotFields("생활인구");
                 field.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
+                field.Function = Excel.XlConsolidationFunction.xlAverage;
                 
                 field = (Excel.PivotField)pt.PivotFields("성별");
                 field.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
