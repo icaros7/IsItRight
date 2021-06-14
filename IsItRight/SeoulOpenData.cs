@@ -139,6 +139,7 @@ namespace IsItRight
         /// <param name="value">가져올 json name</param>
         /// <param name="row">0-4, 데이터 row 번호</param>
         /// <returns></returns>
+        // TODO: JSON 데이터 파싱과 GetValue 분리
         public string GetValue(string value,int row)
         {
             using (WebClient wc = new WebClient())
