@@ -53,7 +53,11 @@ namespace IsItRight
             set
             {
                 DateTime today = DateTime.Today;
-                if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyyMMdd"))) return;
+                if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyyMMdd")))
+                {
+                    Debug.WriteLine(@"ERROR: Not valid date: " + value);
+                    return;
+                }
 
                 _date = DateTime.ParseExact(value.ToString(), @"yyyyMMdd", null);
                 Debug.WriteLine(@"INFO: Set Date: " + value);
