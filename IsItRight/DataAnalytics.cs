@@ -34,6 +34,11 @@ namespace IsItRight
             }
         }
 
+        /// <summary>
+        /// 나이대 배열을 받아 해당 나이대를 조건에 추가합니다.
+        /// </summary>
+        /// <param name="sex">0 or 1, 남성 or 여성</param>
+        /// <param name="age">0-15, 0: 0~9, 1: 10~14, 2:15~19, ... , 14:64~69, 15: 70+@</param>
         public void SetAge(int sex, int[] age)
         {
             _so.SetAge(sex, age);
@@ -180,6 +185,9 @@ namespace IsItRight
             }
         }
         
+        /// <summary>
+        /// 수집된 데이터를 엑셀 데이터로 내보내기 합니다.
+        /// </summary>
         public void Export()
         {
             _de.WriteData();
