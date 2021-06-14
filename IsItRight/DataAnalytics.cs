@@ -77,11 +77,11 @@ namespace IsItRight
         /// <summary>
         /// 지정된 데이터 범위 내에서 평균값을 산출 합니다.
         /// </summary>
-        /// <param name="dateF"></param>
-        /// <param name="dateT"></param>
-        /// <param name="timeF"></param>
-        /// <param name="timeT"></param>
-        /// <param name="sex"></param>
+        /// <param name="dateF">yyyyMMdd, 시작 날짜</param>
+        /// <param name="dateT">yyyymmdd, 종료 날짜</param>
+        /// <param name="timeF">d, 시작 시간</param>
+        /// <param name="timeT">d, 종료 시간</param>
+        /// <param name="sex">none or 0-1, 0: 남성, 1: 여성, 매개변수 안쓸 경우 모두</param>
         /// <returns></returns>
         public double[] GetSomeAvg(int dateF, int dateT, int timeF, int timeT, int sex)
         {
@@ -136,6 +136,78 @@ namespace IsItRight
             }
 
             return sum;
+        }
+        
+        // TODO: 두 성별 모두 검색시 알고리즘 개선 필요
+        public double[] GetSomeAvg(int dateF, int dateT, int timeF, int timeT)
+        {
+            Debug.WriteLine(@"INFO: Call GetSomeAvg");
+
+            List<int> ageRow0 = new List<int>();
+            List<int> ageRow1 = new List<int>();
+            SetRow(ageRow0, _so.GetAgeArray(0));
+            SetRow(ageRow1, _so.GetAgeArray(1));
+            SetSettings(false, dateF, timeF);
+            double[] sum0 = new double[ageRow0[0]];
+            double[] sum1 = new double[ageRow1[0]];
+            int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
+            int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
+
+            if (ageRow0[0] == 0 || ageRow1[0] == 0)
+            {
+                Debug.WriteLine(@"ERROR: No true age");
+                return new double[] {-1};
+            }
+            
+            try
+            {
+                for (int i = 0; i < dateT - dateF + 1; i++)
+                {
+                    for (int j = 0; j < timeT - timeF + 1; j++)
+                    {
+                        SetSettings(true, dateF + i, timeF + j);
+                        for (int k = 0; k < ageRow0[0]; k++)
+                        {
+                            Double.TryParse(GetSomeValue(@"MALE_F" + ageF[ageRow0[k + 1]] +
+                                                         @"T" + ageT[ageRow0[k + 1]] + @"_LVPOP_CO"), out double value);
+                            sum0[k] += value;
+                            if (Save)
+                                _de.AddData(new[]
+                                {
+                                    _lastInfo[0].ToString(), _so.Location.ToString(), "남성",
+                                    _lastInfo[1].ToString(), ageF[ageRow0[k + 1]] + "~" + ageT[ageRow0[k + 1]] + "세",
+                                    value.ToString(), GetPercent(value) + "%"
+                                });
+                        }
+                        for (int k = 0; k < ageRow1[0]; k++)
+                        {
+                            Double.TryParse(GetSomeValue(@"FEMALE_F" + ageF[ageRow1[k + 1]] +
+                                                         @"T" + ageT[ageRow1[k + 1]] + @"_LVPOP_CO"), out double value);
+                            sum0[k] += value;
+                            if (Save)
+                                _de.AddData(new[]
+                                {
+                                    _lastInfo[0].ToString(), _so.Location.ToString(), "여성",
+                                    _lastInfo[1].ToString(), ageF[ageRow1[k + 1]] + "~" + ageT[ageRow1[k + 1]] + "세",
+                                    value.ToString(), GetPercent(value) + "%"
+                                });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"ERROR: GetSomeAvg - " + e);
+                _de.Release();
+                Environment.Exit(-1);
+            }
+            
+            for (int i = 0; i < sum0.Length; i++)
+            {
+                sum0[i] = sum0[i] / ((dateT - dateF + 1) * (timeT - timeF + 1));
+            }
+
+            return sum0;
         }
 
         public double[] GetSomeAvg(int timeF, int timeT, int sex)
