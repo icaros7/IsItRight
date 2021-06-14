@@ -141,10 +141,9 @@ namespace IsItRight
         /// <returns></returns>
         public string GetValue(string value,int row)
         {
-            Debug.WriteLine(@"INFO: Call GetValue");
             using (WebClient wc = new WebClient())
             {
-                Debug.WriteLine(@"INFO: GetValue json data: " + value + @", " + row);
+                Debug.WriteLine(@"INFO: GetValue Date: {0}, Location: {1}, Time: {2}, Value: {3}, Row: {4}", Date, Location, Time, value, row);
                 string jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey + @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
                                                                  Date + @"/" + Time + @"/" + Location);
                 
