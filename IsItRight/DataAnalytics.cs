@@ -7,11 +7,23 @@ namespace IsItRight
     public class DataAnalytics
     {
         private readonly SeoulOpenData _so;
+        private DataExport _de;
+        private bool _save;
         
-        public DataAnalytics(SeoulOpenData seoulOpenData)
+        public DataAnalytics(SeoulOpenData so)
         {
             Debug.WriteLine(@"INFO: New DataAnalytics initializing");
-            _so = seoulOpenData;
+            _so = so;
+            _de = new DataExport();
+        }
+
+        /// <summary>
+        /// 엑셀 데이터 저장 유무를 선택 합니다.
+        /// </summary>
+        public bool Save
+        {
+            get => _save;
+            set => _save = value;
         }
 
         /// <summary>
@@ -85,7 +97,9 @@ namespace IsItRight
                 Debug.WriteLine(@"INFO: Row: " + i);
                 for (int j = 0; j < ageRow.Count - 1; j++)
                 {
-                    sum += Double.Parse(_so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
+                    double value = Double.Parse(_so.GetValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[j + 1]] + @"T" + ageT[ageRow[j + 1]] + @"_LVPOP_CO", i));
+                    sum += value;
+                    if (Save) _de.AddData(new[] { _so.Date.ToString(), _so.Location.ToString(), sex == 0 ? @"남성" : @"여성", _so.Time, ageF[ageRow[j + 1]] + @"~" + ageT[ageRow[j + 1]] + @"세", value.ToString(), GetPercentOfAll(value) + @"%"});
                 }
             }
             
@@ -131,6 +145,11 @@ namespace IsItRight
 
             _so.Time = (originTime == "") ? "-1" : originTime;
             return Math.Truncate((value / total) * 10000) / 100;
+        }
+
+        public void Export()
+        {
+            _de.WriteData();
         }
     }
 }
