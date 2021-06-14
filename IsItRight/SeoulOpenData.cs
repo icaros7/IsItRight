@@ -14,10 +14,11 @@ namespace IsItRight
         private bool[] _male = new bool[14];
         private bool[] _female = new bool[14];
 
-        public SeoulOpenData(string apiKey)
+        public SeoulOpenData(string apiKey, int location)
         {
             Debug.WriteLine(@"INFO: New SeoulOpenData initializing");
             ApiKey = apiKey;
+            Location = location;
         }
 
         // openAPI 인증키 설정 메서드
@@ -92,7 +93,7 @@ namespace IsItRight
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,14(64~69),15(70+@)</param>
-        public void SetAge(int sex, int[] age)
+        protected internal void SetAge(int sex, int[] age)
         {
             if (sex == 0) { _male = new bool[14]; }
             else if (sex == 1) { _female = new bool[14]; }

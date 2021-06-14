@@ -10,11 +10,12 @@ namespace IsItRight
         private DataExport _de;
         private bool _save;
         
-        public DataAnalytics(SeoulOpenData so)
+        public DataAnalytics(string api, int location)
         {
             Debug.WriteLine(@"INFO: New DataAnalytics initializing");
-            _so = so;
-            _de = new DataExport();
+            _so = new SeoulOpenData(api, location);
+            _de = null;
+            _lastInfo[2] = location;
         }
 
         /// <summary>
@@ -24,6 +25,11 @@ namespace IsItRight
         {
             get => _save;
             set => _save = value;
+        }
+
+        public void SetAge(int sex, int[] age)
+        {
+            _so.SetAge(sex, age);
         }
 
         /// <summary>
