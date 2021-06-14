@@ -53,8 +53,8 @@ namespace IsItRight
                 Excel.PivotCache pc = wb.PivotCaches().Create(Excel.XlPivotTableSourceType.xlDatabase, range);
                 Excel.PivotTable pt = pc.CreatePivotTable(ws.Cells[4, 9], "요약");
                 
-                Excel.Shape chart = ws.Shapes.AddChart(Excel.XlChartType.xl3DColumnClustered,
-                    300, 100, 400, 200);
+                Excel.Shape chart = ws.Shapes.AddChart(Excel.XlChartType.xlLine,
+                    300, 100, 500, 200);
                 chart.Chart.SetSourceData(pt.TableRange1);
                 
                 Excel.PivotField field = ((Excel.PivotField)pt.PivotFields("날짜"));
