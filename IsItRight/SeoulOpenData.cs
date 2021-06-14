@@ -68,10 +68,10 @@ namespace IsItRight
         // 범위: 00 ~ 23
         public string Time
         {
-            get => (_time == -1) ? "" : _time.ToString("D2");
+            get => _time.ToString("D2");
             set
             {
-                if (IsTime(value) || value == "-1")
+                if (IsTime(value))
                 {
                     _time = Int32.Parse(value);
                     Debug.WriteLine(@"INFO: Set Time: " + value);
