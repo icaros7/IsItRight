@@ -6,7 +6,7 @@ namespace IsItRight
 {
     public class DataAnalytics
     {
-        private SeoulOpenData _so;
+        private readonly SeoulOpenData _so;
         
         public DataAnalytics(SeoulOpenData seoulOpenData)
         {
