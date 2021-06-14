@@ -121,8 +121,6 @@ namespace IsItRight
         /// <returns></returns>
         public bool[] GetAgeArray(int sex)
         {
-            Debug.WriteLine(@"INFO: Call GetAgeArray");
-            
             if (sex == 0) return _male;
             return _female;
         }
