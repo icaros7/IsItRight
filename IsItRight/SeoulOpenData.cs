@@ -13,7 +13,7 @@ namespace IsItRight
         private bool[] _male = new bool[14];
         private int _time = -1;
 
-        public SeoulOpenData(string apiKey, int location)
+        protected internal SeoulOpenData(string apiKey, int location)
         {
             Debug.WriteLine(@"INFO: New SeoulOpenData initializing");
             ApiKey = apiKey;
@@ -21,8 +21,7 @@ namespace IsItRight
         }
 
         // openAPI 인증키 설정 메서드
-        // 발급: https://data.seoul.go.kr/together/mypage/actkeyMain.do
-        public string ApiKey
+        private string ApiKey
         {
             get => _apiKey;
             set
@@ -34,7 +33,7 @@ namespace IsItRight
 
         // 행자부 행정동 코드 기반 위치 설정 메서드
         // 행자부 행정동 코드: https://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do
-        public int Location
+        protected internal int Location
         {
             get => _location;
             set
@@ -46,7 +45,7 @@ namespace IsItRight
 
         // 날짜 설정 메서드
         // 정확성을 위해 2020년 2월 이후 설정 가능
-        public int Date
+        protected internal int Date
         {
             get => int.Parse(_date.ToString("yyyyMMdd"));
             set
@@ -65,7 +64,7 @@ namespace IsItRight
 
         // 시간대 설정 메서드
         // 범위: 00 ~ 23
-        public string Time
+        protected internal string Time
         {
             get => _time.ToString("D2");
             set
@@ -82,12 +81,12 @@ namespace IsItRight
             }
         }
 
-        public bool IsTime(string value)
+        private bool IsTime(string value)
         {
             return 0 <= int.Parse(value) && int.Parse(value) <= 23;
         }
 
-        public bool IsTime(string value1, string value2)
+        private bool IsTime(string value1, string value2)
         {
             return IsTime(value1) && IsTime(value2) && int.Parse(value1) < int.Parse(value2);
         }
@@ -131,7 +130,7 @@ namespace IsItRight
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <returns></returns>
-        public bool[] GetAgeArray(int sex)
+        protected internal bool[] GetAgeArray(int sex)
         {
             if (sex == 0) return _male;
             return _female;
@@ -143,12 +142,12 @@ namespace IsItRight
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="index">0~14,나이대</param>
         /// <returns></returns>
-        public bool GetAgeAera(int sex, int index)
+        protected internal bool GetAgeAera(int sex, int index)
         {
             return sex == 0 ? _male[index] : _female[index];
         }
 
-        public string GetJson()
+        protected internal string GetJson()
         {
             using (var wc = new WebClient())
             {

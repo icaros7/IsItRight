@@ -12,7 +12,7 @@ namespace IsItRight
         private static Worksheet ws;
         private static int row = 2;
 
-        public DataExport()
+        protected internal DataExport()
         {
             Debug.WriteLine(@"INFO: New DataExport initializing");
             try
@@ -85,7 +85,7 @@ namespace IsItRight
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public void AddData(string[] data)
+        protected internal void AddData(string[] data)
         {
             // TODO: 비동기 실행 대응
             try
@@ -106,7 +106,7 @@ namespace IsItRight
         /// <summary>
         ///     엑셀 데이터를 날짜 및 시간과 함께 디렉토리에 저장합니다.
         /// </summary>
-        public void WriteData(bool addChart)
+        protected internal void WriteData(bool addChart)
         {
             if (addChart) ChartAdd();
 
