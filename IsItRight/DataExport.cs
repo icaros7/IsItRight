@@ -7,18 +7,17 @@ namespace IsItRight
 {
     public class DataExport
     {
-        private static Application excelApp;
-        private static Workbook wb;
-        private static Worksheet ws;
-        private static int row = 2;
+        private Application excelApp;
+        private Workbook wb;
+        private Worksheet ws;
+        private int row = 2;
 
         protected internal DataExport()
         {
             Debug.WriteLine(@"INFO: New DataExport initializing");
             try
             {
-                excelApp = new Application();
-                excelApp.Visible = false;
+                excelApp = new Application {Visible = false};
                 wb = excelApp.Workbooks.Add();
                 ws = wb.Worksheets.get_Item(1) as Worksheet;
 
