@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using IsItRight;
 using Newtonsoft.Json.Linq;
 
 namespace IsItRight
@@ -17,6 +16,11 @@ namespace IsItRight
 
         public DataAnalytics(string api, int location)
         {
+            if (api.Equals(@"PUT_YOUR_API_KEY"))
+            {
+                Debug.WriteLine(@"ERROR: No API Key");
+                Environment.Exit(-1);
+            }
             Debug.WriteLine(@"INFO: New DataAnalytics initializing");
             _so = new SeoulOpenData(api, location);
             _lastInfo[2] = location;
@@ -40,25 +44,6 @@ namespace IsItRight
         public void SetAge(int[] age)
         {
             _so.SetAge(age);
-        }
-
-        /// <summary>
-        ///     json 데이터로부터 값을 추출 합니다.
-        /// </summary>
-        /// <param name="value">원하는 데이터 name</param>
-        /// <param name="row">0-4, row 값, 기본 값: 0</param>
-        /// <returns></returns>
-        public string GetSomeValue(string value)
-        {
-            if (_json == null) _json = JObject.Parse(_so.GetJson());
-            var status = (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE");
-            if (status != @"INFO-000")
-            {
-                Debug.WriteLine(@"ERROR: GetSomeValue - " + status);
-                Environment.Exit(-1);
-            }
-
-            return (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[0]." + value);
         }
 
         /// <summary>
@@ -188,6 +173,37 @@ namespace IsItRight
         public void Export()
         {
             _de.WriteData(AddChart);
+        }
+
+        /// <summary>
+        ///     json 데이터로부터 값을 추출 합니다.
+        /// </summary>
+        /// <param name="value">원하는 데이터 name</param>
+        /// <param name="row">0-4, row 값, 기본 값: 0</param>
+        /// <returns></returns>
+        private string GetSomeValue(string value)
+        {
+            if (_json == null)
+            {
+                try
+                {
+                    _json = JObject.Parse(_so.GetJson());
+                }
+                catch (Exception)
+                {
+                    Debug.WriteLine(@"ERROR: Wrong API Key or data.seoul.go.kr is down");
+                    _de.Release();
+                    Environment.Exit(-1);
+                }
+            }
+            var status = (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE");
+            if (status != @"INFO-000")
+            {
+                Debug.WriteLine(@"ERROR: GetSomeValue - " + status);
+                Environment.Exit(-1);
+            }
+
+            return (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[0]." + value);
         }
 
         /// <summary>
