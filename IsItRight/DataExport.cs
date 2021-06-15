@@ -128,7 +128,7 @@ namespace IsItRight
         /// <summary>
         ///     엑셀 앱을 종료하여 파일을 반환합니다.
         /// </summary>
-        private void Release()
+        protected internal void Release()
         {
             ws = null;
             wb.Close(false);
