@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
 
 namespace IsItRight
 {
     public class DataExport
     {
-        private static Excel.Application excelApp;
-        private static Excel.Workbook wb;
-        private static Excel.Worksheet ws;
+        private static Application excelApp;
+        private static Workbook wb;
+        private static Worksheet ws;
         private static int row = 2;
-        
+
         public DataExport()
         {
             Debug.WriteLine(@"INFO: New DataExport initializing");
             try
             {
-                excelApp = new Excel.Application();
+                excelApp = new Application();
                 excelApp.Visible = false;
                 wb = excelApp.Workbooks.Add();
-                ws = wb.Worksheets.get_Item(1) as Excel.Worksheet;
-                
+                ws = wb.Worksheets.get_Item(1) as Worksheet;
+
                 // 1행 해더 추가
                 ws.Cells[1, 1] = @"날짜";
                 ws.Cells[1, 2] = @"행정동";
@@ -39,7 +39,7 @@ namespace IsItRight
         }
 
         /// <summary>
-        /// 피벗 차트를 엑셀 우측에 추가합니다.
+        ///     피벗 차트를 엑셀 우측에 추가합니다.
         /// </summary>
         private void ChartAdd()
         {
@@ -47,31 +47,31 @@ namespace IsItRight
 
             try
             {
-                Excel.Range last = ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-                Excel.Range range = ws.get_Range("A1", last);
+                var last = ws.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing);
+                var range = ws.get_Range("A1", last);
 
-                Excel.PivotCache pc = wb.PivotCaches().Create(Excel.XlPivotTableSourceType.xlDatabase, range);
-                Excel.PivotTable pt = pc.CreatePivotTable(ws.Cells[4, 9], "요약");
+                var pc = wb.PivotCaches().Create(XlPivotTableSourceType.xlDatabase, range);
+                PivotTable pt = pc.CreatePivotTable(ws.Cells[4, 9], "요약");
 
-                Excel.Shape chart = ws.Shapes.AddChart(Excel.XlChartType.xlLine,
+                var chart = ws.Shapes.AddChart(XlChartType.xlLine,
                     300, 100, 500, 200);
                 chart.Chart.SetSourceData(pt.TableRange1);
 
-                Excel.PivotField field = ((Excel.PivotField) pt.PivotFields("날짜"));
-                field.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                var field = (PivotField) pt.PivotFields("날짜");
+                field.Orientation = XlPivotFieldOrientation.xlRowField;
 
-                field = ((Excel.PivotField) pt.PivotFields("시간대"));
-                field.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+                field = (PivotField) pt.PivotFields("시간대");
+                field.Orientation = XlPivotFieldOrientation.xlRowField;
 
-                field = (Excel.PivotField) pt.PivotFields("생활인구");
-                field.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
-                field.Function = Excel.XlConsolidationFunction.xlAverage;
+                field = (PivotField) pt.PivotFields("생활인구");
+                field.Orientation = XlPivotFieldOrientation.xlDataField;
+                field.Function = XlConsolidationFunction.xlAverage;
 
-                field = (Excel.PivotField) pt.PivotFields("성별");
-                field.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
+                field = (PivotField) pt.PivotFields("성별");
+                field.Orientation = XlPivotFieldOrientation.xlPageField;
 
-                field = (Excel.PivotField) pt.PivotFields("연령층");
-                field.Orientation = Excel.XlPivotFieldOrientation.xlColumnField;
+                field = (PivotField) pt.PivotFields("연령층");
+                field.Orientation = XlPivotFieldOrientation.xlColumnField;
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@ namespace IsItRight
         }
 
         /// <summary>
-        /// 데이터를 셀에 추가합니다. 0: 날짜, 1: 행정동 코드, 2: 성별, 3: 시간대, 4: 연령층, 5: 생활인구, 6: 시간대 백분율
+        ///     데이터를 셀에 추가합니다. 0: 날짜, 1: 행정동 코드, 2: 성별, 3: 시간대, 4: 연령층, 5: 생활인구, 6: 시간대 백분율
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -90,28 +90,27 @@ namespace IsItRight
             // TODO: 비동기 실행 대응
             try
             {
-                for (int i = 0; i < data.Length; i++)
-                {
+                for (var i = 0; i < data.Length; i++)
                     // 1행 해더에 알맞게 각 열에 데이터 입력
                     ws.Cells[row, i + 1] = data[i];
-                }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
                 Release();
             }
+
             row++;
         }
 
         /// <summary>
-        /// 엑셀 데이터를 날짜 및 시간과 함께 디렉토리에 저장합니다.
+        ///     엑셀 데이터를 날짜 및 시간과 함께 디렉토리에 저장합니다.
         /// </summary>
         public void WriteData()
         {
             ChartAdd();
-            
-            string today = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+
+            var today = DateTime.Now.ToString("yyyyMMdd-HHmmss");
             try
             {
                 wb.SaveAs(Path.Combine(Environment.CurrentDirectory, @"IsItRight-" + today + @".xlsx"));
@@ -127,7 +126,7 @@ namespace IsItRight
         }
 
         /// <summary>
-        /// 엑셀 앱을 종료하여 파일을 반환합니다.
+        ///     엑셀 앱을 종료하여 파일을 반환합니다.
         /// </summary>
         private void Release()
         {
@@ -136,7 +135,7 @@ namespace IsItRight
             wb = null;
             excelApp.Quit();
             excelApp = null;
-            
+
             GC.Collect();
             Debug.WriteLine("INFO: Released");
         }
