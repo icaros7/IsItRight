@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
-using Newtonsoft.Json.Linq;
 
 namespace IsItRight
 {
     public class SeoulOpenData
     {
         private string _apiKey;
-        private int _location;
         private DateTime _date;
-        private int _time = -1;
-        private bool[] _male = new bool[14];
         private bool[] _female = new bool[14];
+        private int _location;
+        private bool[] _male = new bool[14];
+        private int _time = -1;
 
         public SeoulOpenData(string apiKey, int location)
         {
@@ -44,16 +43,16 @@ namespace IsItRight
                 Debug.WriteLine(@"INFO: Set Location: " + value);
             }
         }
-        
+
         // 날짜 설정 메서드
         // 정확성을 위해 2020년 2월 이후 설정 가능
         public int Date
         {
-            get => Int32.Parse(_date.ToString("yyyyMMdd"));
+            get => int.Parse(_date.ToString("yyyyMMdd"));
             set
             {
-                DateTime today = DateTime.Today;
-                if (20200201 > value || value >= Int32.Parse(today.ToString(@"yyyyMMdd")))
+                var today = DateTime.Today;
+                if (20200201 > value || value >= int.Parse(today.ToString(@"yyyyMMdd")))
                 {
                     Debug.WriteLine(@"ERROR: Not valid date: " + value);
                     return;
@@ -73,10 +72,11 @@ namespace IsItRight
             {
                 if (IsTime(value))
                 {
-                    _time = Int32.Parse(value);
+                    _time = int.Parse(value);
                     Debug.WriteLine(@"INFO: Set Time: " + value);
                     return;
                 }
+
                 Debug.WriteLine(@"ERROR: " + value + @" is not correct time format. Set to -1 (Default value)");
                 _time = -1;
             }
@@ -84,38 +84,44 @@ namespace IsItRight
 
         public bool IsTime(string value)
         {
-            return 0 <= Int32.Parse(value) && Int32.Parse(value) <= 23;
+            return 0 <= int.Parse(value) && int.Parse(value) <= 23;
         }
 
         public bool IsTime(string value1, string value2)
         {
-            return IsTime(value1) && IsTime(value2) && (Int32.Parse(value1) < Int32.Parse(value2));
+            return IsTime(value1) && IsTime(value2) && int.Parse(value1) < int.Parse(value2);
         }
-        
+
         /// <summary>
-        /// 나이대 배열 설정 메서드
+        ///     나이대 배열 설정 메서드
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,14(64~69),15(70+@)</param>
         protected internal void SetAge(int sex, int[] age)
         {
-            if (sex == 0) { _male = new bool[14]; }
-            else if (sex == 1) { _female = new bool[14]; }
-            else { return; }
-            
+            if (sex == 0)
+                _male = new bool[14];
+            else if (sex == 1)
+                _female = new bool[14];
+            else
+                return;
+
             Debug.Write(@"INFO: Set True in " + (sex == 0 ? "Male" : "Female") + @": ");
-            foreach (int s in age)
+            foreach (var s in age)
             {
-                if (sex == 0) { _male[s] = true; }
-                else { _female[s] = true; }
-                
+                if (sex == 0)
+                    _male[s] = true;
+                else
+                    _female[s] = true;
+
                 Debug.Write(s + @" ");
             }
+
             Debug.WriteLine(@"");
         }
 
         /// <summary>
-        /// 각 성별 나이대 bool 배열 반환
+        ///     각 성별 나이대 bool 배열 반환
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <returns></returns>
@@ -126,25 +132,26 @@ namespace IsItRight
         }
 
         /// <summary>
-        /// 성별의 나이대 bool 값 반환
+        ///     성별의 나이대 bool 값 반환
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
         /// <param name="index">0~14,나이대</param>
         /// <returns></returns>
         public bool GetAgeAera(int sex, int index)
         {
-            return (sex == 0) ? _male[index] : _female[index];
+            return sex == 0 ? _male[index] : _female[index];
         }
 
         public string GetJson()
         {
-            using (WebClient wc = new WebClient())
+            using (var wc = new WebClient())
             {
                 if (_time == -1) return "-1";
-                string jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey + @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
-                                                                 Date + @"/" + Time + @"/" + Location);
+                var jsonData = new WebClient().DownloadString(@"http://openapi.seoul.go.kr:8088/" + ApiKey +
+                                                              @"/json/SPOP_LOCAL_RESD_DONG/1/5/" +
+                                                              Date + @"/" + Time + @"/" + Location);
                 Debug.WriteLine(@"INFO: GetJSON Date: {0}, Location: {1}, Time: {2}", Date, Location, Time);
-                
+
                 return jsonData;
             }
         }

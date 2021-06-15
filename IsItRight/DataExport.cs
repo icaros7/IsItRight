@@ -49,35 +49,34 @@ namespace IsItRight
             {
                 Excel.Range last = ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
                 Excel.Range range = ws.get_Range("A1", last);
-                
+
                 Excel.PivotCache pc = wb.PivotCaches().Create(Excel.XlPivotTableSourceType.xlDatabase, range);
                 Excel.PivotTable pt = pc.CreatePivotTable(ws.Cells[4, 9], "요약");
-                
+
                 Excel.Shape chart = ws.Shapes.AddChart(Excel.XlChartType.xlLine,
                     300, 100, 500, 200);
                 chart.Chart.SetSourceData(pt.TableRange1);
-                
-                Excel.PivotField field = ((Excel.PivotField)pt.PivotFields("날짜"));
-                field.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
-                
-                field = ((Excel.PivotField)pt.PivotFields("시간대"));
+
+                Excel.PivotField field = ((Excel.PivotField) pt.PivotFields("날짜"));
                 field.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
 
-                field = (Excel.PivotField)pt.PivotFields("생활인구");
+                field = ((Excel.PivotField) pt.PivotFields("시간대"));
+                field.Orientation = Excel.XlPivotFieldOrientation.xlRowField;
+
+                field = (Excel.PivotField) pt.PivotFields("생활인구");
                 field.Orientation = Excel.XlPivotFieldOrientation.xlDataField;
                 field.Function = Excel.XlConsolidationFunction.xlAverage;
-                
-                field = (Excel.PivotField)pt.PivotFields("성별");
+
+                field = (Excel.PivotField) pt.PivotFields("성별");
                 field.Orientation = Excel.XlPivotFieldOrientation.xlPageField;
-                
-                
-                field = (Excel.PivotField)pt.PivotFields("연령층");
+
+                field = (Excel.PivotField) pt.PivotFields("연령층");
                 field.Orientation = Excel.XlPivotFieldOrientation.xlColumnField;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
-                Release();
+                Environment.Exit(-1);
             }
         }
 
@@ -88,6 +87,7 @@ namespace IsItRight
         /// <returns></returns>
         public void AddData(string[] data)
         {
+            // TODO: 비동기 실행 대응
             try
             {
                 for (int i = 0; i < data.Length; i++)

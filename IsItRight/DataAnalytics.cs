@@ -126,7 +126,6 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: GetSomeAvg - " + e);
-                _de.Release();
                 Environment.Exit(-1);
             }
             
@@ -198,7 +197,6 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: GetSomeAvg - " + e);
-                _de.Release();
                 Environment.Exit(-1);
             }
             
