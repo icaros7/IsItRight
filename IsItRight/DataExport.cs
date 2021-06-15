@@ -129,11 +129,14 @@ namespace IsItRight
         /// <summary>
         /// 엑셀 앱을 종료하여 파일을 반환합니다.
         /// </summary>
-        public void Release()
+        private void Release()
         {
+            ws = null;
             wb.Close(false);
+            wb = null;
             excelApp.Quit();
-            excelApp.Workbooks.Close();
+            excelApp = null;
+            
             GC.Collect();
             Debug.WriteLine("INFO: Released");
         }
