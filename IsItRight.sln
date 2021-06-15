@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItRight", "IsItRight\IsItRight.csproj", "{7B6D8159-CCD6-4989-8A1C-A34389F394C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItRight_Sample_Console", "IsItRight_Sample_Console\IsItRight_Sample_Console.csproj", "{D42BC70D-6631-4312-9273-F312383B7B6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7B6D8159-CCD6-4989-8A1C-A34389F394C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6D8159-CCD6-4989-8A1C-A34389F394C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6D8159-CCD6-4989-8A1C-A34389F394C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42BC70D-6631-4312-9273-F312383B7B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42BC70D-6631-4312-9273-F312383B7B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42BC70D-6631-4312-9273-F312383B7B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42BC70D-6631-4312-9273-F312383B7B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
