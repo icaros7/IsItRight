@@ -10,7 +10,7 @@ namespace IsItRight
         private static JObject _json;
         private readonly SeoulOpenData _so;
         private DataExport _de;
-        private readonly int[] _lastInfo = {-1, -1, -1};
+        private int[] _lastInfo = {-1, -1, -1};
         private readonly int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
         private readonly int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
 
