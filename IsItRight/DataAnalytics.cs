@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using IsItRight;
 using Newtonsoft.Json.Linq;
 
 namespace IsItRight
@@ -11,28 +12,20 @@ namespace IsItRight
         private readonly SeoulOpenData _so;
         private DataExport _de;
         private readonly int[] _lastInfo = {-1, -1, -1};
-        private bool _save;
+        private readonly int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
+        private readonly int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
 
         public DataAnalytics(string api, int location)
         {
             Debug.WriteLine(@"INFO: New DataAnalytics initializing");
             _so = new SeoulOpenData(api, location);
-            _de = null;
             _lastInfo[2] = location;
         }
 
         /// <summary>
         ///     엑셀 데이터 저장 유무를 선택 합니다.
         /// </summary>
-        public bool Save
-        {
-            get => _save;
-            set
-            {
-                _save = value;
-                if (value) _de = new DataExport();
-            }
-        }
+        public bool AddChart { get; set; }
 
         /// <summary>
         ///     나이대 배열을 받아 해당 나이대를 조건에 추가합니다.
@@ -43,17 +36,10 @@ namespace IsItRight
         {
             _so.SetAge(sex, age);
         }
-
-        /// <summary>
-        ///     전체 생활인구로부터 백분율을 구합니다.
-        /// </summary>
-        /// <param name="value">비교 값</param>
-        /// <param name="row">0-4, row 값, 기본 값: 0</param>
-        /// <returns></returns>
-        private double GetPercent(double value)
+        
+        public void SetAge(int[] age)
         {
-            var total = double.Parse(GetSomeValue(@"TOT_LVPOP_CO"));
-            return Math.Truncate(value / total * 10000) / 100;
+            _so.SetAge(age);
         }
 
         /// <summary>
@@ -88,17 +74,16 @@ namespace IsItRight
         {
             Debug.WriteLine(@"INFO: Call GetSomeAvg");
 
+            _de = new DataExport();
             var ageRow = new List<int>();
             SetRow(ageRow, _so.GetAgeArray(sex));
             SetSettings(false, dateF, timeF);
             var sum = new double[ageRow[0]];
-            int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
-            int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
 
             if (ageRow[0] == 0)
             {
                 Debug.WriteLine(@"ERROR: No true age");
-                return new double[] {-1};
+                return null;
             }
 
             try
@@ -112,20 +97,19 @@ namespace IsItRight
                         double.TryParse(GetSomeValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[k + 1]] +
                                                      @"T" + ageT[ageRow[k + 1]] + @"_LVPOP_CO"), out var value);
                         sum[k] += value;
-                        if (Save)
-                            _de.AddData(new[]
-                            {
-                                _lastInfo[0].ToString(), _so.Location.ToString(), sex == 0 ? "남성" : "여성",
-                                _lastInfo[1].ToString(), ageF[ageRow[k + 1]] + "~" + ageT[ageRow[k + 1]] + "세",
-                                value.ToString(), GetPercent(value) + "%"
-                            });
+                        _de.AddData(new[]
+                        {
+                            _lastInfo[0].ToString(), _so.Location.ToString(), sex == 0 ? "남성" : "여성",
+                            _lastInfo[1].ToString(), ageF[ageRow[k + 1]] + "~" + ageT[ageRow[k + 1]] + "세",
+                            value.ToString(), GetPercent(value) + "%"
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: GetSomeAvg - " + e);
-                Environment.Exit(-1);
+                return null;
             }
 
             for (var i = 0; i < sum.Length; i++) sum[i] = sum[i] / ((dateT - dateF + 1) * (timeT - timeF + 1));
@@ -134,24 +118,20 @@ namespace IsItRight
         }
 
         // TODO: 두 성별 모두 검색시 알고리즘 개선 필요
-        public double[] GetSomeAvg(int dateF, int dateT, int timeF, int timeT)
+        public double[][] GetSomeAvg(int dateF, int dateT, int timeF, int timeT)
         {
             Debug.WriteLine(@"INFO: Call GetSomeAvg");
-
-            var ageRow0 = new List<int>();
-            var ageRow1 = new List<int>();
-            SetRow(ageRow0, _so.GetAgeArray(0));
-            SetRow(ageRow1, _so.GetAgeArray(1));
+            
+            _de = new DataExport();
+            var ageRow = new List<List<int>>();
+            SetRow(ageRow, _so.GetAgeArray(0), _so.GetAgeArray(1));
             SetSettings(false, dateF, timeF);
-            var sum0 = new double[ageRow0[0]];
-            var sum1 = new double[ageRow1[0]];
-            int[] ageF = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
-            int[] ageT = {9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64, 69, 74};
+            double[][] sum = {new double[ageRow[0][0]], new double[ageRow[1][0]]};
 
-            if (ageRow0[0] == 0 || ageRow1[0] == 0)
+            if (ageRow[0][0] == 0 || ageRow[1][0] == 0)
             {
-                Debug.WriteLine(@"ERROR: No true age");
-                return new double[] {-1};
+                Debug.WriteLine(@"ERROR: No true age - " + (ageRow[0][0] == 0 ? 0 : 1));
+                return null;
             }
 
             try
@@ -160,49 +140,66 @@ namespace IsItRight
                 for (var j = 0; j < timeT - timeF + 1; j++)
                 {
                     SetSettings(true, dateF + i, timeF + j);
-                    for (var k = 0; k < ageRow0[0]; k++)
+                    for (var k = 0; k < Math.Max(ageRow[0][0], ageRow[1][0]); k++)
                     {
-                        double.TryParse(GetSomeValue(@"MALE_F" + ageF[ageRow0[k + 1]] +
-                                                     @"T" + ageT[ageRow0[k + 1]] + @"_LVPOP_CO"), out var value);
-                        sum0[k] += value;
-                        if (Save)
-                            _de.AddData(new[]
+                        if (ageRow[0][0] > k)
+                        {
+                            double.TryParse(GetSomeValue(@"MALE_F" + ageF[ageRow[0][k + 1]] +
+                                                         @"T" + ageT[ageRow[0][k + 1]] + @"_LVPOP_CO"), out var value0);
+                            sum[0][k] += value0;
+                            _de.AddData(new []
                             {
                                 _lastInfo[0].ToString(), _so.Location.ToString(), "남성",
-                                _lastInfo[1].ToString(), ageF[ageRow0[k + 1]] + "~" + ageT[ageRow0[k + 1]] + "세",
-                                value.ToString(), GetPercent(value) + "%"
+                                _lastInfo[1].ToString(), ageF[ageRow[0][k + 1]] + "~" + ageT[ageRow[0][k + 1]] + "세",
+                                value0.ToString(), GetPercent(value0) + "%"
                             });
-                    }
-
-                    for (var k = 0; k < ageRow1[0]; k++)
-                    {
-                        double.TryParse(GetSomeValue(@"FEMALE_F" + ageF[ageRow1[k + 1]] +
-                                                     @"T" + ageT[ageRow1[k + 1]] + @"_LVPOP_CO"), out var value);
-                        sum0[k] += value;
-                        if (Save)
+                        }
+                        if (ageRow[1][0] > k)
+                        {
+                            double.TryParse(GetSomeValue(@"FEMALE_F" + ageF[ageRow[1][k + 1]] +
+                                                         @"T" + ageT[ageRow[1][k + 1]] + @"_LVPOP_CO"), out var value1);
+                            sum[1][k] += value1;
                             _de.AddData(new[]
                             {
                                 _lastInfo[0].ToString(), _so.Location.ToString(), "여성",
-                                _lastInfo[1].ToString(), ageF[ageRow1[k + 1]] + "~" + ageT[ageRow1[k + 1]] + "세",
-                                value.ToString(), GetPercent(value) + "%"
+                                _lastInfo[1].ToString(),
+                                ageF[ageRow[1][k + 1]] + "~" + ageT[ageRow[1][k + 1]] + "세",
+                                value1.ToString(), GetPercent(value1) + "%"
                             });
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: GetSomeAvg - " + e);
-                Environment.Exit(-1);
+                return null;
             }
 
-            for (var i = 0; i < sum0.Length; i++) sum0[i] = sum0[i] / ((dateT - dateF + 1) * (timeT - timeF + 1));
+            for (var i = 0; i < sum[0].Length; i++) sum[0][i] = sum[0][i] / ((dateT - dateF + 1) * (timeT - timeF + 1));
+            for (var i = 0; i < sum[1].Length; i++) sum[1][i] = sum[1][i] / ((dateT - dateF + 1) * (timeT - timeF + 1));
 
-            return sum0;
+            return sum;
         }
 
-        public double[] GetSomeAvg(int timeF, int timeT, int sex)
+        /// <summary>
+        ///     수집된 데이터를 엑셀 데이터로 내보내기 합니다.
+        /// </summary>
+        public void Export()
         {
-            return GetSomeAvg(_so.Date, _so.Date, timeF, timeT, sex);
+            _de.WriteData(AddChart);
+        }
+
+        /// <summary>
+        ///     전체 생활인구로부터 백분율을 구합니다.
+        /// </summary>
+        /// <param name="value">비교 값</param>
+        /// <param name="row">0-4, row 값, 기본 값: 0</param>
+        /// <returns></returns>
+        private double GetPercent(double value)
+        {
+            var total = double.Parse(GetSomeValue(@"TOT_LVPOP_CO"));
+            return Math.Truncate(value / total * 10000) / 100;
         }
 
 
@@ -247,12 +244,19 @@ namespace IsItRight
             }
         }
 
-        /// <summary>
-        ///     수집된 데이터를 엑셀 데이터로 내보내기 합니다.
-        /// </summary>
-        public void Export()
+        private void SetRow(List<List<int>> row, bool[] ageArray0, bool[] ageArray1)
         {
-            _de.WriteData();
+            for (var i = 0; i < 2; i++)
+            {
+                row.Add(new List<int>());
+                row[i].Add(0);
+                for (var j = 0; j < (i == 0 ? ageArray0.Length : ageArray1.Length); j++)
+                {
+                    if (!( i == 0 ? ageArray0[j] : ageArray1[j])) continue;
+                    row[i][0]++;
+                    row[i].Add(j);
+                }
+            }
         }
     }
 }

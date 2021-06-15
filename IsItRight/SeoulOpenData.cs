@@ -96,7 +96,7 @@ namespace IsItRight
         ///     나이대 배열 설정 메서드
         /// </summary>
         /// <param name="sex">0 or 1, 남성 or 여성</param>
-        /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,14(64~69),15(70+@)</param>
+        /// <param name="age">0(0~9),1(10~14),2(15~19), ... ,12(64~69),13(70+@)</param>
         protected internal void SetAge(int sex, int[] age)
         {
             if (sex == 0)
@@ -118,6 +118,12 @@ namespace IsItRight
             }
 
             Debug.WriteLine(@"");
+        }
+
+        protected internal void SetAge(int[] age)
+        {
+            SetAge(0, age);
+            SetAge(1, age);
         }
 
         /// <summary>

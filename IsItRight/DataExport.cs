@@ -106,9 +106,9 @@ namespace IsItRight
         /// <summary>
         ///     엑셀 데이터를 날짜 및 시간과 함께 디렉토리에 저장합니다.
         /// </summary>
-        public void WriteData()
+        public void WriteData(bool addChart)
         {
-            ChartAdd();
+            if (addChart) ChartAdd();
 
             var today = DateTime.Now.ToString("yyyyMMdd-HHmmss");
             try
