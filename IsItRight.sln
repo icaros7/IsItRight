@@ -1,8 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItRight", "IsItRight\IsItRight.csproj", "{7B6D8159-CCD6-4989-8A1C-A34389F394C3}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsItRight", "IsItRight\IsItRight.csproj", "{7B6D8159-CCD6-4989-8A1C-A34389F394C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItRight_Sample_Console", "IsItRight_Sample_Console\IsItRight_Sample_Console.csproj", "{D42BC70D-6631-4312-9273-F312383B7B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsItRight_Sample_Console", "IsItRight_Sample_Console\IsItRight_Sample_Console.csproj", "{D42BC70D-6631-4312-9273-F312383B7B6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsItRight_Sample_WinForm", "IsItRight_Sample_WinForm\IsItRight_Sample_WinForm.csproj", "{CECEAF69-79E1-46B5-84DB-B715243331E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,15 @@ Global
 		{D42BC70D-6631-4312-9273-F312383B7B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D42BC70D-6631-4312-9273-F312383B7B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D42BC70D-6631-4312-9273-F312383B7B6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CECEAF69-79E1-46B5-84DB-B715243331E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CECEAF69-79E1-46B5-84DB-B715243331E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CECEAF69-79E1-46B5-84DB-B715243331E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CECEAF69-79E1-46B5-84DB-B715243331E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E57AF46-A9A3-4EE6-AD4F-90EB164E62B2}
 	EndGlobalSection
 EndGlobal
