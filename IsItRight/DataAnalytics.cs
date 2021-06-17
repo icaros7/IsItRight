@@ -183,7 +183,7 @@ namespace IsItRight
         
         public void Release()
         {
-            _de.Release();
+            if (_de != null) _de.Release();
         }
 
         /// <summary>
