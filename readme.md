@@ -1,5 +1,7 @@
-# 여기 어때 - Is It Right?
+# 여기 어때? - Is It Right
 .Net 5.0, 서울시 생활인구 기반 데이터 분석 라이브러리
+
+- **한국어** (이 문서)
 
 # 개요
 [서울시 열린데이터 광장](https://data.seoul.go.kr)의 [서울 생활인구](https://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do)를 활용한 행정동 별로 특정 조건에 알맞게 원하는 데이터를 검색 및 추출하여 Excel 형식으로 저장 및 피벗 차트 생성을 해주는 라이브러리 입니다.
