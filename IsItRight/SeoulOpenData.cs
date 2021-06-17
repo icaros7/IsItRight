@@ -44,14 +44,14 @@ namespace IsItRight
         }
 
         // 날짜 설정 메서드
-        // 정확성을 위해 2020년 2월 이후 설정 가능
+        // 정확성을 위해 2020년 2월 이후 ~ 2일 전 설정 가능
         protected internal int Date
         {
             get => int.Parse(_date.ToString("yyyyMMdd"));
             set
             {
-                var today = DateTime.Today;
-                if (20200201 > value || value >= int.Parse(today.ToString(@"yyyyMMdd")))
+                var setday = DateTime.Today.AddDays(-2);
+                if (20200201 > value || value > int.Parse(setday.ToString(@"yyyyMMdd")))
                 {
                     Debug.WriteLine(@"ERROR: Not valid date: " + value);
                     return;

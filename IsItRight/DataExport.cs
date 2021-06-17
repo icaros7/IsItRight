@@ -12,7 +12,7 @@ namespace IsItRight
         private Worksheet ws;
         private int row = 2;
 
-        protected internal DataExport()
+        public DataExport()
         {
             Debug.WriteLine(@"INFO: New DataExport initializing");
             try
@@ -105,7 +105,7 @@ namespace IsItRight
         /// <summary>
         ///     엑셀 데이터를 날짜 및 시간과 함께 디렉토리에 저장합니다.
         /// </summary>
-        protected internal void WriteData(bool addChart)
+        protected internal int WriteData(bool addChart)
         {
             if (addChart) ChartAdd();
 
@@ -117,11 +117,11 @@ namespace IsItRight
             catch (Exception e)
             {
                 Debug.WriteLine(@"ERROR: " + e);
-            }
-            finally
-            {
                 Release();
+                return -1;
             }
+            Release();
+            return 0;
         }
 
         /// <summary>
@@ -130,9 +130,9 @@ namespace IsItRight
         protected internal void Release()
         {
             ws = null;
-            wb.Close(false);
+            if (wb != null) wb.Close(false);
             wb = null;
-            excelApp.Quit();
+            if (excelApp != null) excelApp.Quit();
             excelApp = null;
 
             GC.Collect();

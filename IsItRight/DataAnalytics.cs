@@ -79,8 +79,10 @@ namespace IsItRight
                     SetSettings(true, dateF + i, timeF + j);
                     for (var k = 0; k < ageRow[0]; k++)
                     {
-                        double.TryParse(GetSomeValue((sex == 0 ? @"" : @"FE") + @"MALE_F" + ageF[ageRow[k + 1]] +
-                                                     @"T" + ageT[ageRow[k + 1]] + @"_LVPOP_CO"), out var value);
+                        string buffer = GetSomeValue((sex == 0 ? "" : @"FE") + @"MALE_F" + ageF[ageRow[k + 1]] + @"T" + ageT[ageRow[k + 1]] + @"_LVPOP_CO");
+                        if (buffer.Equals(@"데이터 없음")) return null;
+
+                        double.TryParse(buffer, out var value);
                         sum[k] += value;
                         _de.AddData(new[]
                         {
@@ -129,8 +131,10 @@ namespace IsItRight
                     {
                         if (ageRow[0][0] > k)
                         {
-                            double.TryParse(GetSomeValue(@"MALE_F" + ageF[ageRow[0][k + 1]] +
-                                                         @"T" + ageT[ageRow[0][k + 1]] + @"_LVPOP_CO"), out var value0);
+                            string buffer = GetSomeValue(@"MALE_F" + ageF[ageRow[0][k + 1]] + @"T" + ageT[ageRow[0][k + 1]] + @"_LVPOP_CO");
+                            if (buffer.Equals(@"데이터 없음")) return null;
+
+                            double.TryParse(buffer, out var value0);
                             sum[0][k] += value0;
                             _de.AddData(new []
                             {
@@ -141,8 +145,10 @@ namespace IsItRight
                         }
                         if (ageRow[1][0] > k)
                         {
-                            double.TryParse(GetSomeValue(@"FEMALE_F" + ageF[ageRow[1][k + 1]] +
-                                                         @"T" + ageT[ageRow[1][k + 1]] + @"_LVPOP_CO"), out var value1);
+                            string buffer = GetSomeValue(@"FEMALE_F" + ageF[ageRow[1][k + 1]] + @"T" + ageT[ageRow[1][k + 1]] + @"_LVPOP_CO");
+                            if (buffer.Equals(@"데이터 없음")) return null;
+
+                            double.TryParse(buffer, out var value1);
                             sum[1][k] += value1;
                             _de.AddData(new[]
                             {
@@ -170,9 +176,14 @@ namespace IsItRight
         /// <summary>
         ///     수집된 데이터를 엑셀 데이터로 내보내기 합니다.
         /// </summary>
-        public void Export()
+        public int Export()
         {
-            _de.WriteData(AddChart);
+            return _de.WriteData(AddChart);
+        }
+        
+        public void Release()
+        {
+            _de.Release();
         }
 
         /// <summary>
@@ -196,11 +207,22 @@ namespace IsItRight
                     Environment.Exit(-1);
                 }
             }
+
             var status = (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.RESULT.CODE");
             if (status != @"INFO-000")
             {
-                Debug.WriteLine(@"ERROR: GetSomeValue - " + status);
-                Environment.Exit(-1);
+                status = (string)_json.SelectToken(@"RESULT.CODE");
+                if (status == @"INFO-200")
+                {
+                    Debug.WriteLine(@"ERROR: No date for that date.");
+                    return "데이터 없음";
+                }
+                else
+                {
+                    Debug.WriteLine(@"ERROR: GetSomeValue - " + status);
+                    Environment.Exit(-1);
+                }
+
             }
 
             return (string) _json.SelectToken(@"SPOP_LOCAL_RESD_DONG.row[0]." + value);
