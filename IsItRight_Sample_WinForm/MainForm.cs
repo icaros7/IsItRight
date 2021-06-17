@@ -123,11 +123,10 @@ namespace IsItRight_Sample_WinForm
 
         private void authBtn_Click(object sender, EventArgs e)
         {
-            // OpenAPI키 미입력시 중단
+            // OpenAPI키 미입력시 기본 키 대체
             if (apiTextBox.Text == "")
             {
-                MessageBox.Show("오픈API키를 입력하여 주십시오.", "Is It Right", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+                apiTextBox.Text = "7555665843686f6d33336841536642";
             }
             string url = @"http://openapi.seoul.go.kr:8088/" + apiTextBox.Text + @"/xml/SPOP_LOCAL_RESD_DONG/1/5/20210601/00/11140550";
             XDocument xDocument = XDocument.Load(url);

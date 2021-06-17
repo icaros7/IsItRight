@@ -75,9 +75,9 @@ namespace IsItRight_Sample_WinForm
             // 
             this.apiTextBox.Location = new System.Drawing.Point(12, 12);
             this.apiTextBox.Name = "apiTextBox";
-            this.apiTextBox.PlaceholderText = "열린데이터 광장 API키";
+            this.apiTextBox.PlaceholderText = "사용자 API키: 기본 제공";
             this.apiTextBox.Size = new System.Drawing.Size(167, 23);
-            this.apiTextBox.TabIndex = 1;
+            this.apiTextBox.TabIndex = 2;
             // 
             // linkLabel1
             // 
@@ -97,7 +97,7 @@ namespace IsItRight_Sample_WinForm
             this.authBtn.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.authBtn.Name = "authBtn";
             this.authBtn.Size = new System.Drawing.Size(101, 41);
-            this.authBtn.TabIndex = 3;
+            this.authBtn.TabIndex = 1;
             this.authBtn.Text = "API 키 확인";
             this.authBtn.UseVisualStyleBackColor = true;
             this.authBtn.Click += new System.EventHandler(this.authBtn_Click);
@@ -109,7 +109,7 @@ namespace IsItRight_Sample_WinForm
             this.locationTextBox.Name = "locationTextBox";
             this.locationTextBox.PlaceholderText = "행정동 코드: 기본값 명동";
             this.locationTextBox.Size = new System.Drawing.Size(167, 23);
-            this.locationTextBox.TabIndex = 2;
+            this.locationTextBox.TabIndex = 3;
             this.locationTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.locationTextBox_KeyPress);
             // 
             // linkLabel2
