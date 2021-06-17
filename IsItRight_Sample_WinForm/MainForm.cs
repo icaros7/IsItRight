@@ -45,6 +45,16 @@ namespace IsItRight_Sample_WinForm
             exitBtn.PerformClick();
         }
 
+        private void openProcess(string value)
+        {
+            var process = new ProcessStartInfo(value)
+            {
+                UseShellExecute = true,
+                Verb = "open"
+            };
+            Process.Start(process);
+        }
+
         /// <summary>
         /// DataAnalytisc 및 SeoulOpenData를 초기화 합니다.
         /// </summary>
@@ -165,13 +175,13 @@ namespace IsItRight_Sample_WinForm
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("서울 열린데이터 광장 오픈API키 신청 화면으로 이동하시겠습니까?", "Is It Right", MessageBoxButtons.OKCancel, icon: MessageBoxIcon.Information);
-            if (dialogResult == DialogResult.OK) Process.Start("https://data.seoul.go.kr/together/mypage/actkeyMain.do");
+            if (dialogResult == DialogResult.OK) openProcess("https://data.seoul.go.kr/together/mypage/actkeyMain.do");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("서울 열린데이터 광장으로부터 행정동 코드표 (엑셀)을 다운로드 하시겠습니까?", "Is It Right", MessageBoxButtons.OKCancel, icon: MessageBoxIcon.Information);
-            if (dialogResult == DialogResult.OK) Process.Start("https://data.seoul.go.kr/together/statbook/fileDownload.do?cotCd=999&filename=%ED%96%89%EC%A0%95%EB%8F%99%EC%BD%94%EB%93%9C_%EB%A7%A4%ED%95%91%EC%A0%95%EB%B3%B4_20200325.xlsx&mnuSrl=1&mnuNm=%ED%85%8C%EC%8A%A4%ED%8A%B81&mnuFg=C&upMnuSrl=1");
+            if (dialogResult == DialogResult.OK) openProcess("https://data.seoul.go.kr/together/statbook/fileDownload.do?cotCd=999&filename=%ED%96%89%EC%A0%95%EB%8F%99%EC%BD%94%EB%93%9C_%EB%A7%A4%ED%95%91%EC%A0%95%EB%B3%B4_20200325.xlsx&mnuSrl=1&mnuNm=%ED%85%8C%EC%8A%A4%ED%8A%B81&mnuFg=C&upMnuSrl=1");
         }
 
         private void timeF_SelectedIndexChanged(object sender, EventArgs e)
@@ -202,6 +212,7 @@ namespace IsItRight_Sample_WinForm
                 else _da.SetAge(sex, ageList.ToArray());
 
                 dataExportBtn.Enabled = false;
+                dataExportBtn.Text = "잠시만 기다려주십시오";
                 _da.AddChart = pivotChart.Checked;
 
                 if (sex == 3)
@@ -225,12 +236,14 @@ namespace IsItRight_Sample_WinForm
 
                 if (_da.Export() == 0)
                 {
-                    MessageBox.Show("데이터 내보내기가 완료되었습니다.\r" + Environment.CurrentDirectory, "Is It Right", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult dialogResult = MessageBox.Show("데이터 내보내기가 완료되었습니다.\r저장위치: " + Environment.CurrentDirectory + "\r\r저장된 폴더를 여시겠습니까?", "Is It Right", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (dialogResult.Equals(DialogResult.Yes)) openProcess(Environment.CurrentDirectory);
                 }
                 else
                 {
                     MessageBox.Show("데이터 파일 쓰기에 실패하였습니다.", "Is Right", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                dataExportBtn.Text = "데이터 추출";
                 dataExportBtn.Enabled = true;
             }
             catch (Exception _e)
